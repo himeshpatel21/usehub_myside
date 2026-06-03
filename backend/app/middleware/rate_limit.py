@@ -27,6 +27,9 @@ async def rate_limit_middleware(request: Request, call_next):
     if request.method == "OPTIONS":
         return await call_next(request)
 
+    if request.url.path == "/api/v1/health":
+        return await call_next(request)
+
     redis = get_redis_client()
     method = request.method
 
