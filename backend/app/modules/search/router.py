@@ -13,6 +13,7 @@ from app.db.models.user import User
 from app.db.session import get_db
 from app.modules.case_studies.router import _cs_to_list_out
 from app.modules.users.schemas import UserMinimalOut
+from app.db.models.case_study import CaseStudy, CaseStudyTag, Tag
 
 router = APIRouter(prefix="/search", tags=["search"])
 
@@ -21,6 +22,7 @@ router = APIRouter(prefix="/search", tags=["search"])
 async def search(
     q: str = Query(..., min_length=1, max_length=200),
     type: str = Query(default="case_study", description="case_study | user | all"),
+    tags: list[str] = Query(default=[]),
     limit: int = Query(default=20, le=100),
     offset: int = Query(default=0, ge=0),
     db: AsyncSession = Depends(get_db),
@@ -49,6 +51,12 @@ async def search(
                 text(
                     "ts_rank(to_tsvector('english', case_studies.title || ' ' || "
                     "COALESCE(case_studies.summary, '')), plainto_tsquery('english', :q)) DESC"
+                )
+            )
+            .where(
+                *( 
+                    [CaseStudy.tags.any(CaseStudyTag.tag.has(Tag.slug.in_(tags)))]
+                    if tags else []
                 )
             )
             .limit(limit)
