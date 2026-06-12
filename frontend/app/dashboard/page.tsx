@@ -47,7 +47,7 @@ export default function DashboardPage() {
 
       {items.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground border rounded-xl">
-          <p className="mb-3">You haven't created any case studies yet.</p>
+          <p className="mb-3">You haven&apos;t created any case studies yet.</p>
           <Button asChild size="sm">
             <Link href="/new">Create your first one</Link>
           </Button>
