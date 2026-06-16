@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 "use client";
 
 import { auth, type User } from "@/lib/api";
@@ -30,3 +31,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthCtx.Provider>
   );
 }
+
